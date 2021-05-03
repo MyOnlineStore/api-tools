@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+.phpcs-cache
+.phpunit.result.cache
+/vendor/
+composer.lock
+infection.log
+phpcs.xml
+phpunit.xml
+psalm.xml
