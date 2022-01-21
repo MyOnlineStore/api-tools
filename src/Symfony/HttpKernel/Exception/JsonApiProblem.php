@@ -22,7 +22,7 @@ final class JsonApiProblem extends HttpException
         int $statusCode = 500,
         array $additionalInformation = [],
         ?string $type = null,
-        ?\Throwable $previous = null,
+        ?\Throwable $previous = null
     ) {
         parent::__construct(
             $statusCode,
