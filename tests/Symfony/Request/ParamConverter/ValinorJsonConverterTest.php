@@ -19,12 +19,17 @@ final class ValinorJsonConverterTest extends TestCase
 
     public function testConvert(): void
     {
-        $request = new Request(content: \json_encode(['foo' => 'qux', 'bar' => 12], \JSON_THROW_ON_ERROR));
+        $request = new Request(
+            content: \json_encode(['id' => '12', 'foo' => 'qux', 'bar' => 12], \JSON_THROW_ON_ERROR)
+        );
         $configuration = new ParamConverter(['name' => 'value']);
 
         self::assertTrue($this->converter->apply($request, $configuration));
         self::assertTrue($request->attributes->has('value'));
-        self::assertEquals(new StubValue('qux', 12), $request->attributes->get('value'));
+        self::assertEquals(
+            new StubValue(StubId::fromString('12'), 'qux', 12),
+            $request->attributes->get('value')
+        );
     }
 
     /**
@@ -33,8 +38,11 @@ final class ValinorJsonConverterTest extends TestCase
     public function mappingErrorDataProvider(): \Generator
     {
         yield ['', []];
-        yield [\json_encode(['foo' => 'qux'], \JSON_THROW_ON_ERROR), ['bar']];
-        yield [\json_encode(['bar' => 12], \JSON_THROW_ON_ERROR), ['foo']];
+        yield [\json_encode(['foo' => 'qux'], \JSON_THROW_ON_ERROR), ['id', 'bar']];
+        yield [\json_encode(['bar' => 12], \JSON_THROW_ON_ERROR), ['id', 'foo']];
+        yield [\json_encode(['id' => '12', 'foo' => 'qux'], \JSON_THROW_ON_ERROR), ['bar']];
+        yield [\json_encode(['id' => '12', 'bar' => 12], \JSON_THROW_ON_ERROR), ['foo']];
+        yield [\json_encode(['foo' => 'qux', 'bar' => 12], \JSON_THROW_ON_ERROR), ['id']];
     }
 
     /**
