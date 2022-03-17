@@ -7,7 +7,7 @@ use Webmozart\Assert\Assert;
 
 final class StubId
 {
-    private function __construct(
+    public function __construct(
         private string $id,
     ) {
     }

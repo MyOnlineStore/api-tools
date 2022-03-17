@@ -8,13 +8,13 @@ use PHPUnit\Framework\TestCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ValinorJsonConverterTest extends TestCase
+final class ValinorBodyJsonConverterTest extends TestCase
 {
-    private StubValinorJsonConverter $converter;
+    private StubValinorBodyJsonConverter $converter;
 
     protected function setUp(): void
     {
-        $this->converter = new StubValinorJsonConverter();
+        $this->converter = new StubValinorBodyJsonConverter();
     }
 
     public function testConvert(): void
