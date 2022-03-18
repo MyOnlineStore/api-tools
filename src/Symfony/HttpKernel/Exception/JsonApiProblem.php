@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace MyOnlineStore\ApiTools\Symfony\HttpKernel\Exception;
 
+use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\Tree\Message\MessagesFlattener;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class JsonApiProblem extends HttpException
@@ -36,6 +38,22 @@ final class JsonApiProblem extends HttpException
         $this->detail = $detail;
         $this->additionalInformation = $additionalInformation;
         $this->type = $type ?? 'https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html';
+    }
+
+    public static function fromValinorMappingError(
+        string $title,
+        string $detail,
+        MappingError $mappingError,
+        int $statusCode = 422
+    ): self {
+        $errors = [];
+        $flattenedMessages = (new MessagesFlattener($mappingError->node()))->errors();
+
+        foreach ($flattenedMessages as $message) {
+            $errors[\str_replace(\sprintf('.%s', $message->name()), '', $message->path())] = $message->__toString();
+        }
+
+        return new self($title, $detail, $statusCode, ['errors' => $errors]);
     }
 
     /**
