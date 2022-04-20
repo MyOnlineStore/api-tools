@@ -4,9 +4,6 @@
     "type": "library",
     "license": "MIT",
     "config": {
-        "platform": {
-            "php": "7.4.7"
-        },
         "sort-packages": true,
         "allow-plugins": {
             "infection/extension-installer": true,
