@@ -13,4 +13,8 @@
     <file>tests</file>
 
     <rule ref="MyOnlineStore"/>
+
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint.MissingNativeTypeHint">
+        <exclude-pattern>src/Symfony/Request/ParamConverter/ValinorParamConverter.php</exclude-pattern>
+    </rule>
 </ruleset>
