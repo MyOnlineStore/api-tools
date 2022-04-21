@@ -20,7 +20,7 @@ final class StubValinorParamConverter extends ValinorParamConverter
      */
     protected function getData(Request $request, ParamConverter $configuration)
     {
-        /** @psalm-suppress InternalMethod */
+        /** @psalm-suppress InternalMethod, ReservedWord */
         return $request->get($configuration->getName());
     }
 
