@@ -25,7 +25,8 @@
         "cuyz/valinor": "^0.7.0",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/event-dispatcher": "^5.4 || ^6.0",
-        "symfony/http-kernel": "^5.4 || ^6.0"
+        "symfony/http-kernel": "^5.4 || ^6.0",
+        "symfony/validator": "^5.4 || ^6.0"
     },
     "require-dev": {
         "myonlinestore/coding-standard": "^3.1",

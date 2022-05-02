@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ValinorParameterConverterTest extends TestCase
+final class ValinorParamConverterTest extends TestCase
 {
     private StubValinorParamConverter $converter;
 
