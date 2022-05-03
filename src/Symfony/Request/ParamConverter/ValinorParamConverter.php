@@ -12,6 +12,12 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class ValinorParamConverter implements ParamConverterInterface
 {
+    public function __construct(
+        private bool $debug = false,
+        private ?string $valinorCacheDir = null,
+    ) {
+    }
+
     public function apply(Request $request, ParamConverter $configuration): bool
     {
         try {
@@ -23,8 +29,12 @@ abstract class ValinorParamConverter implements ParamConverterInterface
             );
         } catch (MappingError $mappingError) {
             throw JsonApiProblem::fromValinorMappingError('Invalid Request', 'Invalid data provided.', $mappingError);
-        } catch (\Throwable) {
-            throw new JsonApiProblem('Invalid Request', 'Invalid data provided.', 422);
+        } catch (\Throwable $exception) {
+            throw new JsonApiProblem(
+                'Invalid Request',
+                $this->debug ? $exception->getMessage() : 'Invalid data provided.',
+                422
+            );
         }
 
         return true;
@@ -44,6 +54,12 @@ abstract class ValinorParamConverter implements ParamConverterInterface
 
     protected function getMapperBuilder(): MapperBuilder
     {
-        return new MapperBuilder();
+        $mapperBuilder = new MapperBuilder();
+
+        if (null !== $this->valinorCacheDir) {
+            $mapperBuilder = $mapperBuilder->withCacheDir($this->valinorCacheDir);
+        }
+
+        return $mapperBuilder;
     }
 }

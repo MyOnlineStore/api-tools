@@ -34,6 +34,9 @@ jobs:
                 with:
                     php-version: ${{ matrix.php-version }}
                     ini-values: assert.exception=1, zend.assertions=1
+                    tools: cs2pr
             -   uses: ramsey/composer-install@v2
+            -   run: echo "::add-matcher::${{ runner.tool_cache }}/php.json"
+            -   run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-            -   run: vendor/bin/devtools ${{ matrix.tool }}
+            -   run: vendor/bin/devtools ${{ matrix.tool }} --format=github
