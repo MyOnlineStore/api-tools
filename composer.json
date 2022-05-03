@@ -29,11 +29,11 @@
     },
     "require-dev": {
         "myonlinestore/coding-standard": "^3.1",
-        "myonlinestore/php-devtools": "^0.2.0",
+        "myonlinestore/php-devtools": "^0.3.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.16.1",
         "psalm/plugin-symfony": "^3.1",
         "roave/infection-static-analysis-plugin": "^1.18",
-        "vimeo/psalm": "^4.22"
+        "vimeo/psalm": "^4.23"
     }
 }

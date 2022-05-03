@@ -39,20 +39,7 @@ final class ValinorParameterConverterTest extends TestCase
         self::assertEquals(StubId::fromString($expectedValue), $request->attributes->get('id'));
     }
 
-    /**
-     * @return \Generator<int, array{string, list<string>}>
-     */
-    public function mappingErrorDataProvider(): \Generator
-    {
-        yield ['', ['id']];
-    }
-
-    /**
-     * @dataProvider mappingErrorDataProvider
-     *
-     * @param list<string> $errorFields
-     */
-    public function testMappingError(string $requestContent, array $errorFields): void
+    public function testMappingError(): void
     {
         $request = new Request(query: ['id' => '']);
         $configuration = new ParamConverter(['name' => 'id']);
@@ -78,5 +65,44 @@ final class ValinorParameterConverterTest extends TestCase
     {
         self::assertTrue($this->converter->supports(new ParamConverter(['class' => StubId::class])));
         self::assertFalse($this->converter->supports(new ParamConverter(['class' => \stdClass::class])));
+    }
+
+    /**
+     * @dataProvider validRequestProvider
+     */
+    public function testUnregisteredConstructorError(Request $request): void
+    {
+        $configuration = new ParamConverter(['name' => 'id']);
+        $converter = new StubValinorParamConverterWithoutRegisteredConstructor();
+
+        try {
+            $converter->apply($request, $configuration);
+
+            self::fail('JsonApiProblem should be thrown');
+        } catch (JsonApiProblem $exception) {
+            self::assertEquals(422, $exception->getStatusCode());
+            self::assertEquals('Invalid data provided.', $exception->getDetail());
+        }
+    }
+
+    /**
+     * @dataProvider validRequestProvider
+     */
+    public function testUnregisteredConstructorErrorWithDebugging(Request $request): void
+    {
+        $configuration = new ParamConverter(['name' => 'id']);
+        $converter = new StubValinorParamConverterWithoutRegisteredConstructor(true);
+
+        try {
+            $converter->apply($request, $configuration);
+
+            self::fail('JsonApiProblem should be thrown');
+        } catch (JsonApiProblem $exception) {
+            self::assertEquals(422, $exception->getStatusCode());
+            self::assertEquals(
+                \sprintf('No available constructor found for class `%s`.', StubId::class),
+                $exception->getDetail()
+            );
+        }
     }
 }
