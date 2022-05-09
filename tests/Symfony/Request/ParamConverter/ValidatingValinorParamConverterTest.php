@@ -14,13 +14,15 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class ValidatingValinorParamConverterTest extends KernelTestCase
 {
+    private StubValidatingValinorParamConverter $converter;
     /** @var MockObject&ValidatorInterface */
     private $validator;
 
     protected function setUp(): void
     {
-        $this->validator = $this->createMock(ValidatorInterface::class);
-        $this->converter = new StubValidatingValinorParamConverter($this->validator);
+        $this->converter = new StubValidatingValinorParamConverter(
+            $this->validator = $this->createMock(ValidatorInterface::class)
+        );
     }
 
     public function testConvert(): void

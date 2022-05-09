@@ -3,6 +3,8 @@
 .phpcs-cache
 .phpunit.result.cache
 /vendor/
+!/var/cache/.gitkeep
+/var/cache
 composer.lock
 infection.log
 phpcs.xml

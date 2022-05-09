@@ -12,12 +12,17 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 abstract class ValidatingValinorParamConverter extends ValinorParamConverter
 {
-    public function __construct(protected ValidatorInterface $validator)
-    {
+    public function __construct(
+        protected ValidatorInterface $validator,
+        bool $debug = false,
+        ?string $valinorCacheDir = null
+    ) {
+        parent::__construct($debug, $valinorCacheDir);
     }
 
     protected function map(Request $request, ParamConverter $configuration): mixed
     {
+        /** @psalm-suppress MixedAssignment */
         $mapped = parent::map($request, $configuration);
 
         $violations = $this->validator->validate($mapped);
