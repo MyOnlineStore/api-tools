@@ -8,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Component\HttpFoundation\Request;
 
-final class ValinorParameterConverterTest extends TestCase
+final class ValinorParamConverterTest extends TestCase
 {
     private StubValinorParamConverter $converter;
 
@@ -53,7 +53,7 @@ final class ValinorParameterConverterTest extends TestCase
             self::assertEquals(
                 [
                     'errors' => [
-                        '' => 'Expected a different value than "".',
+                        '*root*' => 'Expected a different value than "".',
                     ],
                 ],
                 $exception->getAdditionalInformation()
