@@ -3,12 +3,15 @@ declare(strict_types=1);
 
 namespace MyOnlineStore\ApiTools\Symfony\Request\ParamConverter;
 
+use CuyZ\Valinor\Cache\FileSystemCache;
 use CuyZ\Valinor\Mapper\MappingError;
+use CuyZ\Valinor\Mapper\Tree\Message\ThrowableMessage;
 use CuyZ\Valinor\MapperBuilder;
 use MyOnlineStore\ApiTools\Symfony\HttpKernel\Exception\JsonApiProblem;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Sensio\Bundle\FrameworkExtraBundle\Request\ParamConverter\ParamConverterInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Webmozart\Assert\InvalidArgumentException;
 
 abstract class ValinorParamConverter implements ParamConverterInterface
 {
@@ -54,10 +57,17 @@ abstract class ValinorParamConverter implements ParamConverterInterface
 
     protected function getMapperBuilder(): MapperBuilder
     {
-        $mapperBuilder = new MapperBuilder();
+        $mapperBuilder = (new MapperBuilder())
+            ->filterExceptions(static function (\Throwable $exception) {
+                if ($exception instanceof InvalidArgumentException) {
+                    return ThrowableMessage::from($exception);
+                }
+
+                throw $exception;
+            });
 
         if (null !== $this->valinorCacheDir) {
-            $mapperBuilder = $mapperBuilder->withCacheDir($this->valinorCacheDir);
+            $mapperBuilder = $mapperBuilder->withCache(new FileSystemCache($this->valinorCacheDir));
         }
 
         return $mapperBuilder;
