@@ -50,8 +50,8 @@ final class JsonApiProblem extends HttpException
         $flattenedMessages = (new MessagesFlattener($mappingError->node()))->errors();
 
         foreach ($flattenedMessages as $message) {
-            $messageNode = $message->node();
-            $errors[\str_replace(\sprintf('.%s', $messageNode->name()), '', $messageNode->path())] = $message->body();
+            $node = $message->node();
+            $errors[\str_replace(\sprintf('.%s', $node->name()), '', $node->path())] = $message->toString();
         }
 
         return new self($title, $detail, $statusCode, ['errors' => $errors]);
