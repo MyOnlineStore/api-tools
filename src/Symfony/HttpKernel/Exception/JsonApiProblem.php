@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace MyOnlineStore\ApiTools\Symfony\HttpKernel\Exception;
 
 use CuyZ\Valinor\Mapper\MappingError;
-use CuyZ\Valinor\Mapper\Tree\Message\MessagesFlattener;
+use CuyZ\Valinor\Mapper\Tree\Message\Messages;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 final class JsonApiProblem extends HttpException
@@ -47,7 +47,7 @@ final class JsonApiProblem extends HttpException
         int $statusCode = 422
     ): self {
         $errors = [];
-        $flattenedMessages = (new MessagesFlattener($mappingError->node()))->errors();
+        $flattenedMessages = Messages::flattenFromNode($mappingError->node());
 
         foreach ($flattenedMessages as $message) {
             $node = $message->node();

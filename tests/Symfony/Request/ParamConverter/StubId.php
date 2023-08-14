@@ -7,11 +7,13 @@ use Webmozart\Assert\Assert;
 
 final class StubId
 {
+    /** @psalm-pure */
     private function __construct(
         private string $id,
     ) {
     }
 
+    /** @psalm-pure */
     public static function fromString(string $id): self
     {
         Assert::stringNotEmpty($id);
