@@ -24,6 +24,9 @@ final class StubValinorBodyJsonConverter extends ValinorParamConverter
     protected function getMapperBuilder(): MapperBuilder
     {
         return parent::getMapperBuilder()
-            ->registerConstructor(static fn (string $id): StubId => StubId::fromString($id));
+            ->registerConstructor(
+                /** @psalm-pure  */
+                static fn (string $id): StubId => StubId::fromString($id)
+            );
     }
 }

@@ -5,7 +5,7 @@ namespace MyOnlineStore\ApiTools\Symfony\Request\ParamConverter;
 
 use CuyZ\Valinor\Cache\FileSystemCache;
 use CuyZ\Valinor\Mapper\MappingError;
-use CuyZ\Valinor\Mapper\Tree\Message\ThrowableMessage;
+use CuyZ\Valinor\Mapper\Tree\Message\MessageBuilder;
 use CuyZ\Valinor\MapperBuilder;
 use MyOnlineStore\ApiTools\Symfony\HttpKernel\Exception\JsonApiProblem;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -28,7 +28,7 @@ abstract class ValinorParamConverter implements ParamConverterInterface
                 $configuration->getName(),
                 $this->getMapperBuilder()
                     ->mapper()
-                    ->map($this->getClass(), $this->getData($request, $configuration))
+                    ->map($this->getClass(), $this->getData($request, $configuration)),
             );
         } catch (MappingError $mappingError) {
             throw JsonApiProblem::fromValinorMappingError('Invalid Request', 'Invalid data provided.', $mappingError);
@@ -58,13 +58,17 @@ abstract class ValinorParamConverter implements ParamConverterInterface
     protected function getMapperBuilder(): MapperBuilder
     {
         $mapperBuilder = (new MapperBuilder())
-            ->filterExceptions(static function (\Throwable $exception) {
-                if ($exception instanceof InvalidArgumentException) {
-                    return ThrowableMessage::from($exception);
-                }
+            ->filterExceptions(
+                /** @psalm-pure  */
+                static function (\Throwable $exception) {
+                    if ($exception instanceof InvalidArgumentException) {
+                        /** @psalm-suppress ImpureMethodCall */
+                        return MessageBuilder::from($exception);
+                    }
 
-                throw $exception;
-            });
+                    throw $exception;
+                },
+            );
 
         if (null !== $this->valinorCacheDir) {
             $mapperBuilder = $mapperBuilder->withCache(new FileSystemCache($this->valinorCacheDir));
