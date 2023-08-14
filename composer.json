@@ -29,7 +29,7 @@
     },
     "require-dev": {
         "myonlinestore/coding-standard": "^3.1",
-        "myonlinestore/php-devtools": "dev-MOS-855-add-php82-support",
+        "myonlinestore/php-devtools": "^0.4",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.16.1",
         "psalm/plugin-symfony": "^4.0",
