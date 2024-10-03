@@ -36,7 +36,8 @@ abstract class ValinorParamConverter implements ParamConverterInterface
             throw new JsonApiProblem(
                 'Invalid Request',
                 $this->debug ? $exception->getMessage() : 'Invalid data provided.',
-                422
+                422,
+                previous: $exception,
             );
         }
 
@@ -59,7 +60,7 @@ abstract class ValinorParamConverter implements ParamConverterInterface
     {
         $mapperBuilder = (new MapperBuilder())
             ->filterExceptions(
-                /** @psalm-pure  */
+            /** @psalm-pure */
                 static function (\Throwable $exception) {
                     if ($exception instanceof InvalidArgumentException) {
                         /** @psalm-suppress ImpureMethodCall */
